@@ -424,7 +424,7 @@ server = function(input, output, session) {
       
       if(dataset == TAB_DATA_LONG)
         return(paste0("ICCAT_T1NC_raw_", get_filename_components(input), ".csv.gz"))
-      else if(dataset == TAB_DATA)
+      else if(dataset == TAB_DATA_WIDE)
         return(paste0("ICCAT_T1NC_", get_filename_components(input), ".csv.gz"))
       else if(dataset == TAB_SUMMARY) 
         return(paste0("ICCAT_T1NC_summary_", get_filename_components(input), ".csv.gz"))
@@ -436,7 +436,7 @@ server = function(input, output, session) {
       
       if(dataset == TAB_DATA_LONG)
         to_download = filter_nc_data_long()
-      else if(dataset == TAB_DATA)
+      else if(dataset == TAB_DATA_WIDE)
         to_download = filter_nc_data()
       else if(dataset == TAB_SUMMARY)
         to_download = filter_summary_data_(input, FALSE)
