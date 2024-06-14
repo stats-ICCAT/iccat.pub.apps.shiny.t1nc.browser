@@ -262,8 +262,8 @@ server = function(input, output, session) {
     renderDataTable({
       filtered_data = validate_filtering(filter_nc_data())
 
-      filtered_data$DATASET_ID = NULL
-      filtered_data$STRATA_ID = NULL
+      #filtered_data$DATASET_ID = NULL
+      #filtered_data$STRATA_ID = NULL
       filtered_data$FLAG_CODE = NULL
       
       return(
@@ -391,7 +391,7 @@ server = function(input, output, session) {
     }
   )
   
-  output$downloadAll = downloadHandler(
+  output$downloadFull = downloadHandler(
     filename = function() {
       dataset = input$dataset
       
