@@ -164,7 +164,7 @@ ui = function() {
                                   dataTableOutput("filtered_data_long")
                          )
                 ),
-                tabPanel(TAB_DATA,
+                tabPanel(TAB_DATA_WIDE,
                          tags$div(id = "filtered_data_container_wide",
                                   dataTableOutput("filtered_data_wide")
                          )
