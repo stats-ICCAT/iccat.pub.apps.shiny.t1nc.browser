@@ -30,11 +30,6 @@ server = function(input, output, session) {
          qualities = c()
     )
   
-  filter_nc_data = reactive({
-    return(
-      filter_nc_data_(input)
-    )
-  })
   
   default_filter_data = function(data, input = EMPTY_FILTER) {
     INFO(paste0("Years          : ", paste0(input$years,         collapse = "-")))
@@ -60,7 +55,7 @@ server = function(input, output, session) {
     if(has_years) {
       first_year = input$years[1]
       last_year  = input$years[2]
-    
+      
       filtered = filtered[YEAR >= first_year & YEAR <= last_year]
     } else {
       first_year = min(data$YEAR)
@@ -86,23 +81,23 @@ server = function(input, output, session) {
     if(!is.null(input$gearGroups)) {
       filtered = filtered[GEAR_GROUP_CODE %in% input$gearGroups]
     }
-
+    
     if(!is.null(input$gears)) {
       filtered = filtered[GEAR_CODE %in% input$gears]
     }
-
+    
     if(!is.null(input$stockAreas)) {
       filtered = filtered[STOCK_AREA_CODE %in% input$stockAreas]
     }
-
+    
     if(!is.null(input$samplingAreas)) {
       filtered = filtered[SAMPLING_AREA_CODE %in% input$samplingAreas]
     }
-
+    
     if(!is.null(input$areas)) {
       filtered = filtered[AREA_CODE %in% input$areas]
     }
-
+    
     if(!is.null(input$fishingZones)) {
       filtered = filtered[FISHING_ZONE_CODE %in% input$fishingZones]
     }
@@ -124,9 +119,33 @@ server = function(input, output, session) {
     return(filtered)
   }
   
-  filter_nc_data_ = function(input = EMPTY_FILTER) {
+  filter_nc_data_wide = reactive({
+    return(
+      filter_nc_data_wide_(input)
+    )
+  })
+  
+  filter_nc_data_wide_ = function(input = EMPTY_FILTER) {
     filtered = default_filter_data(NC_w, input)
 
+    return(filtered)
+  }
+  
+  filter_nc_data_long = reactive({
+    return(
+      filter_nc_data_long_(input)
+    )
+  })
+  
+  filter_nc_data_long_ = function(input = EMPTY_FILTER) {
+    filtered = default_filter_data(NC_l, input)
+
+    return(filtered)
+  }
+  
+  filter_nc_data_ = function(input = EMPTY_FILTER) {
+    filtered = default_filter_data(NC_w, input)
+    
     return(filtered)
   }
   
@@ -258,9 +277,42 @@ server = function(input, output, session) {
     return(filtered_data)
   }
   
-  output$filtered_data =
+  output$filtered_data_long =
     renderDataTable({
-      filtered_data = validate_filtering(filter_nc_data())
+      filtered_data = validate_filtering(filter_nc_data_long())
+      
+      filtered_data$FLAG_CODE = NULL
+      
+      return(
+        DT::datatable(
+          filtered_data,
+          options = list(
+            pageLength = INITIAL_NUM_ENTRIES, 
+            autoWidth = TRUE,
+            scrollX = TRUE,
+            dom = "ltipr" # To remove the 'search box' - see: https://rstudio.github.io/DT/options.html and https://datatables.net/reference/option/dom
+          ),
+          filter    = "none",
+          selection = "none",
+          rownames = FALSE,
+          colnames = c("Dataset ID", "Strata ID",
+                       "Flag", "Fleet code", 
+                       "CPC", "CPC status",
+                       "Gear group", "Gear",
+                       "Year", 
+                       "Stock area", "Sampling area", "Area", "Fishing zone",
+                       "Catch type",
+                       "Quality level",
+                       "Catch unit",
+                       "Species", "Catch")
+        ) 
+        %>% DT::formatCurrency(columns = c("CATCH"), currency = "")
+      )
+    })
+  
+  output$filtered_data_wide =
+    renderDataTable({
+      filtered_data = validate_filtering(filter_nc_data_wide())
 
       #filtered_data$DATASET_ID = NULL
       #filtered_data$STRATA_ID = NULL
@@ -370,7 +422,9 @@ server = function(input, output, session) {
     filename = function() {
       dataset = input$dataset
       
-      if(dataset == TAB_DATA)
+      if(dataset == TAB_DATA_LONG)
+        return(paste0("ICCAT_T1NC_raw_", get_filename_components(input), ".csv.gz"))
+      else if(dataset == TAB_DATA)
         return(paste0("ICCAT_T1NC_", get_filename_components(input), ".csv.gz"))
       else if(dataset == TAB_SUMMARY) 
         return(paste0("ICCAT_T1NC_summary_", get_filename_components(input), ".csv.gz"))
@@ -380,7 +434,9 @@ server = function(input, output, session) {
     content = function(file) {
       dataset = input$dataset
       
-      if(dataset == TAB_DATA)
+      if(dataset == TAB_DATA_LONG)
+        to_download = filter_nc_data_long()
+      else if(dataset == TAB_DATA)
         to_download = filter_nc_data()
       else if(dataset == TAB_SUMMARY)
         to_download = filter_summary_data_(input, FALSE)
@@ -395,8 +451,10 @@ server = function(input, output, session) {
     filename = function() {
       dataset = input$dataset
       
-      if(dataset == TAB_DATA)
-        return(META$FILENAME)
+      if(dataset == TAB_DATA_LONG) 
+        return(META$FILENAME_LONG)
+      else if(dataset == TAB_DATA_WIDE)
+        return(META$FILENAME_WIDE)
       else if(dataset == TAB_SUMMARY) 
         return(paste0("ICCAT_T1NC_summary_", str_replace_all(META$LAST_UPDATE, "\\-", ""), "_full.csv.gz"))
       else # Detailed summary
@@ -405,8 +463,10 @@ server = function(input, output, session) {
     content = function(file) {
       dataset = input$dataset
       
-      if(dataset == "Data")
-        file.copy(paste0("www/", META$FILENAME), file)
+      if(dataset == TAB_DATA_LONG)
+        file.copy(paste0("www/", META$FILENAME_LONG), file)
+      else if(dataset == TAB_DATA_WIDE)
+        file.copy(paste0("www/", META$FILENAME_LONG), file)
       else {
         if(dataset == "Summary") 
           to_download = filter_summary_data_(EMPTY_FILTER, FALSE)

@@ -128,8 +128,8 @@ NC_w = NC_w[, .(FLAG_CODE, FLAG_NAME_EN,
                 BSH, POR, SMA, 
                 oSks,
                 oFis,
-                rest)][order(FLAG_NAME_EN, FLEET_CODE, 
-                             CPC_CODE, CPC_STATUS_CODE,
+                rest)][order(FLAG_CODE, FLAG_NAME_EN, 
+                             FLEET_CODE, CPC_CODE, CPC_STATUS_CODE,
                              GEAR_GROUP_CODE, GEAR_CODE, 
                              YEAR, 
                              STOCK_AREA_CODE, SAMPLING_AREA_CODE, AREA_CODE, FISHING_ZONE_CODE,
@@ -151,10 +151,28 @@ NC$YEAR_SHORT =
     ordered = TRUE
   )
 
-META = list(LAST_UPDATE = "2024-01-31", FILENAME = "ICCAT_T1NC_20240131_full.csv.gz")
+NC_l = NC[, .(DATASET_ID, STRATA_ID,
+              FLAG_CODE, FLAG_NAME_EN,
+              FLEET_CODE, CPC_CODE, CPC_STATUS_CODE,
+              GEAR_GROUP_CODE, GEAR_CODE,
+              YEAR,
+              STOCK_AREA_CODE, SAMPLING_AREA_CODE, AREA_CODE, FISHING_ZONE_CODE,
+              CATCH_TYPE_CODE, QUALITY_CODE, 
+              CATCH_UNIT_CODE, SPECIES_CODE, CATCH)][order(FLAG_CODE, FLAG_NAME_EN, 
+                                                           FLEET_CODE, CPC_CODE, CPC_STATUS_CODE,
+                                                           GEAR_GROUP_CODE, GEAR_CODE, 
+                                                           YEAR, 
+                                                           STOCK_AREA_CODE, SAMPLING_AREA_CODE, AREA_CODE, FISHING_ZONE_CODE,
+                                                           CATCH_TYPE_CODE, QUALITY_CODE)]
+
+META = list(LAST_UPDATE = "2024-01-31", 
+            FILENAME_LONG = "ICCAT_T1NC_20240131_raw_full.csv.gz",
+            FILENAME_WIDE = "ICCAT_T1NC_20240131_full.csv.gz")
 
 save("META", file = "./shiny/META.RData", compress = "gzip")
 save("NC",   file = "./shiny/NC.RData",   compress = "gzip")
+save("NC_l", file = "./shiny/NC_l.RData",   compress = "gzip")
 save("NC_w", file = "./shiny/NC_w.RData", compress = "gzip")
 
-write.table(NC_w, file = gzfile(paste0("./shiny/www/", META$FILENAME)), sep = ",", na = "", row.names = FALSE)
+write.table(NC_l, file = gzfile(paste0("./shiny/www/", META$FILENAME_LONG)), sep = ",", na = "", row.names = FALSE)
+write.table(NC_w, file = gzfile(paste0("./shiny/www/", META$FILENAME_WIDE)), sep = ",", na = "", row.names = FALSE)

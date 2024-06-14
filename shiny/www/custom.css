@@ -1,38 +1,85 @@
-/* DATA */
+/* DATA (long) */
 
-#filtered_data_container {
+#filtered_data_container_long .dataTables_scrollBody table {
+  float: left;
+}
+
+#filtered_data_container_long {
   font-size: x-small;
   padding-top: 1em;
 } 
 
-#filtered_data_container table thead tr th,
-#filtered_data_container table tbody tr td {
+#filtered_data_container_long table thead tr th,
+#filtered_data_container_long table tbody tr td {
   padding-top: 2px !important;
   padding-bottom: 1px !important;
   line-height: 1em;
 }
 
 /* Default cell width + alignment */
-#filtered_data_container table thead tr th,
-#filtered_data_container table tbody tr td {
+#filtered_data_container_long table thead tr th,
+#filtered_data_container_long table tbody tr td {
   min-width: 10px;
 }
 
-#filtered_data_container table thead tr th:nth-child(n + 3),                      /* Header, from the  3rd column ("CPC") onwards */
-#filtered_data_container table tbody tr td:nth-child(n + 3):nth-child(-n + 14)  { /* Body,   from the  3rd column ("CPC") to the 14th column ("Catch unit") */
+#filtered_data_container_long table thead tr th:nth-child(-n + 2),                     /* Header, from the  1st column ("Dataset ID") to the  2nd column ("Strata ID") */        
+#filtered_data_container_long table thead tr th:nth-child(n + 5),                      /* Header, from the  5th column ("CPC") onwards */
+#filtered_data_container_long table tbody tr td:nth-child(n + 5):nth-child(-n + 17)  { /* Body,   from the  5th column ("CPC") to the 17th column ("Species") */
+  text-align: center;
+}
+
+#filtered_data_container_long table thead tr th:nth-child(n + 5):nth-child(-n + 17) {  /* Header, from the  5th column ("CPC") to the 17th column ("Species") */
+  min-width: 35px;
+}
+
+/* Flag name & fleet code */
+#filtered_data_container_long table thead tr th:nth-child(n + 3):nth-child(-n + 4) {   /* Header, from the  3rd column ("Flag") to the 4th column ("Fleet code") */
+  min-width: 150px;
+}
+
+#filtered_data_container_long table thead tr th:nth-child(n + 18) {                    /* Header, from the 18th column ("Catch") onwards */
+  min-width: 40px;
+}
+
+/* DATA (wide) */
+
+#filtered_data_container_wide .dataTables_scrollBody table {
+  float: left;
+}
+
+#filtered_data_container_wide {
+  font-size: x-small;
+  padding-top: 1em;
+} 
+
+#filtered_data_container_wide table thead tr th,
+#filtered_data_container_wide table tbody tr td {
+  padding-top: 2px !important;
+  padding-bottom: 1px !important;
+  line-height: 1em;
+}
+
+/* Default cell width + alignment */
+#filtered_data_container_wide table thead tr th,
+#filtered_data_container_wide table tbody tr td {
+  min-width: 10px;
+}
+
+#filtered_data_container_wide table thead tr th:nth-child(n + 3),                      /* Header, from the  3rd column ("CPC") onwards */
+#filtered_data_container_wide table tbody tr td:nth-child(n + 3):nth-child(-n + 14)  { /* Body,   from the  3rd column ("CPC") to the 14th column ("Catch unit") */
   text-align: center;
 }
 
 /* Flag name & fleet code */
-#filtered_data_container table thead tr th:nth-child(-n + 2) {                    /* Header, from the  1st column ("Flag") to the 2nd column ("Fleet code") */
+#filtered_data_container_wide table thead tr th:nth-child(-n + 2) {                    /* Header, from the  1st column ("Flag") to the 2nd column ("Fleet code") */
   min-width: 150px;
 }
 
-#filtered_data_container table thead tr th:nth-child(n + 3):nth-child(-n + 14) {  /* Header, from the  3rd column ("CPC") to the 14th column ("Catch unit") */
+#filtered_data_container_wide table thead tr th:nth-child(n + 3):nth-child(-n + 14) {  /* Header, from the  3rd column ("CPC") to the 14th column ("Catch unit") */
   min-width: 35px;
 }
 
-#filtered_data_container table thead tr th:nth-child(n + 15) {                    /* Header, from the 15th column ("Total") onwards */
+#filtered_data_container_wide table thead tr th:nth-child(n + 15) {                    /* Header, from the 15th column ("Total") onwards */
   min-width: 40px;
 }
 

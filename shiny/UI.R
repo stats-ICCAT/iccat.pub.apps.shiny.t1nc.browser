@@ -159,9 +159,14 @@ ui = function() {
               width = 10,
               tabsetPanel(
                 id = "dataset",
+                tabPanel(TAB_DATA_LONG,
+                         tags$div(id = "filtered_data_container_long",
+                                  dataTableOutput("filtered_data_long")
+                         )
+                ),
                 tabPanel(TAB_DATA,
-                         tags$div(id = "filtered_data_container",
-                                  dataTableOutput("filtered_data")
+                         tags$div(id = "filtered_data_container_wide",
+                                  dataTableOutput("filtered_data_wide")
                          )
                 ),
                 tabPanel(TAB_SUMMARY,

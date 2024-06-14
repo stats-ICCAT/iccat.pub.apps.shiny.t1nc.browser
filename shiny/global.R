@@ -14,12 +14,14 @@ options(scipen = 9999)
 # THIS IS ***FUNDAMENTAL*** TO HAVE THE DOCKER CONTAINER CORRECTLY LOAD THE .RData FILE WITH THE ORIGINAL UTF-8 ENCODING
 Sys.setlocale(category = "LC_ALL", locale = "en_US.UTF-8")
 
-TAB_DATA             = "Data"
+TAB_DATA_LONG        = "Data (raw)"
+TAB_DATA_WIDE        = "Data"
 TAB_SUMMARY          = "Summary"
 TAB_DETAILED_SUMMARY = "Detailed summary"
 
 load("./META.RData")
 load("./NC.RData")
+load("./NC_l.RData")
 load("./NC_w.RData")
 
 ALL_CPCS           = setNames(as.character(REF_PARTIES$CODE),        paste0(REF_PARTIES$CODE,        " - ", REF_PARTIES$NAME_EN))
