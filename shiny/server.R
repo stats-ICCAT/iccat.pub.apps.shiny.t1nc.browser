@@ -396,6 +396,12 @@ server = function(input, output, session) {
         )
       )
     })
+
+  serialize_last_update_date = function() {
+    return(
+      str_replace_all(META$LAST_UPDATE, "\\-", "")
+    )
+  }
   
   get_filename_components = function(input) {
     components = c(paste0(input$years,         collapse = "-"), 
@@ -414,21 +420,23 @@ server = function(input, output, session) {
     
     components = components[which(components != "")]
     
-    return(paste0(str_replace_all(META$LAST_UPDATE, "\\-", ""), "_", paste0(components, collapse = "_")))
+    return(paste0(components, collapse = "_"))
   }
   
   output$downloadFiltered = downloadHandler(
     filename = function() {
       dataset = input$dataset
       
-      if(dataset == TAB_DATA_LONG)
-        return(paste0("ICCAT_T1NC_raw_", get_filename_components(input), ".csv.gz"))
-      else if(dataset == TAB_DATA_WIDE)
-        return(paste0("ICCAT_T1NC_", get_filename_components(input), ".csv.gz"))
+      filename_prefix = paste0("ICCAT_T1NC_", serialize_last_update_date())
+
+      if(dataset == TAB_DATA_WIDE)
+        return(paste0(filename_prefix, "_",                  get_filename_components(input), ".csv.gz"))
+      else if(dataset == TAB_DATA_LONG)
+        return(paste0(filename_prefix, "_raw_",              get_filename_components(input), ".csv.gz"))
       else if(dataset == TAB_SUMMARY) 
-        return(paste0("ICCAT_T1NC_summary_", get_filename_components(input), ".csv.gz"))
+        return(paste0(filename_prefix, "_summary_",          get_filename_components(input), ".csv.gz"))
       else # Detailed summary
-        return(paste0("ICCAT_T1NC_detailed_summary_", get_filename_components(input), ".csv.gz"))
+        return(paste0(filename_prefix, "_detailed_summary_", get_filename_components(input), ".csv.gz"))
     },
     content = function(file) {
       dataset = input$dataset
@@ -436,7 +444,7 @@ server = function(input, output, session) {
       if(dataset == TAB_DATA_LONG)
         to_download = filter_nc_data_long()
       else if(dataset == TAB_DATA_WIDE)
-        to_download = filter_nc_data()
+        to_download = filter_nc_data_wide()
       else if(dataset == TAB_SUMMARY)
         to_download = filter_summary_data_(input, FALSE)
       else # Detailed summary
@@ -455,9 +463,9 @@ server = function(input, output, session) {
       else if(dataset == TAB_DATA_WIDE)
         return(META$FILENAME_WIDE)
       else if(dataset == TAB_SUMMARY) 
-        return(paste0("ICCAT_T1NC_summary_", str_replace_all(META$LAST_UPDATE, "\\-", ""), "_full.csv.gz"))
+        return(paste0("ICCAT_T1NC_", str_replace_all(META$LAST_UPDATE, "\\-", ""), "_summary_full.csv.gz"))
       else # Detailed summary
-        return(paste0("ICCAT_T1NC_detailed_summary_", str_replace_all(META$LAST_UPDATE, "\\-", ""), "_full.csv.gz"))
+        return(paste0("ICCAT_T1NC_", str_replace_all(META$LAST_UPDATE, "\\-", ""), "_detailed_summary_full.csv.gz"))
     },
     content = function(file) {
       dataset = input$dataset
