@@ -1,5 +1,5 @@
 ui = function() {
-  TITLE = "ICCAT interactive nominal catch data browser v1.0"
+  TITLE = paste0("ICCAT data browser / T1NC / ", META$LAST_UPDATE)
   return(
     fluidPage(
       shinyjs::useShinyjs(),
@@ -20,7 +20,7 @@ ui = function() {
             column(
               width = 8,
               h2(
-                img(src = "iccat-logo.jpg", height = "96px"),
+                img(src = "iccat-logo.jpg", height = "48px"),
                 span(TITLE)
               )
             )
