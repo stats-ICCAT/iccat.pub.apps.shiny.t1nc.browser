@@ -24,6 +24,9 @@ load("./NC.RData")
 load("./NC_l.RData")
 load("./NC_w.RData")
 
+# Removes deprecated areas 
+REF_AREAS = REF_AREAS[DEPRECATED == 0]
+
 ALL_CPCS           = setNames(as.character(REF_PARTIES$CODE),        paste0(REF_PARTIES$CODE,        " - ", REF_PARTIES$NAME_EN))
 ALL_CPC_STATUS     = setNames(as.character(REF_PARTY_STATUS$CODE),   paste0(REF_PARTY_STATUS$CODE,   " - ", REF_PARTY_STATUS$NAME_EN))
 ALL_FLAGS          = setNames(as.character(REF_FLAGS$CODE),          paste0(REF_FLAGS$CODE,          " - ", REF_FLAGS$NAME_EN))

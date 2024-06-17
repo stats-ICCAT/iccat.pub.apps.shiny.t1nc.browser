@@ -28,6 +28,7 @@ server = function(input, output, session) {
          qualities = c()
     )
   
+  observeEvent(input$resetFilters, { session$reload() })
   
   default_filter_data = function(data, input = EMPTY_FILTER) {
     INFO(paste0("Years          : ", paste0(input$years,         collapse = "-")))
