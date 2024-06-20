@@ -473,7 +473,7 @@ server = function(input, output, session) {
       if(dataset == TAB_DATA_LONG)
         file.copy(paste0("www/", META$FILENAME_LONG), file)
       else if(dataset == TAB_DATA_WIDE)
-        file.copy(paste0("www/", META$FILENAME_LONG), file)
+        file.copy(paste0("www/", META$FILENAME_WIDE), file)
       else {
         if(dataset == "Summary") 
           to_download = filter_summary_data_(EMPTY_FILTER, FALSE)
