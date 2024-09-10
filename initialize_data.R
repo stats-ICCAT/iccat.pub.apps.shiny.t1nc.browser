@@ -22,10 +22,10 @@ SPECIES_ORDERED = c("BFT", "ALB", # Temperate tunas
                     "rest" # Everything else
                   )
 
-# Loads the data from dbSTAT
+# Loads the data from T1
 NC = 
   tabular_query(
-    connection = DB_GIS(server = "ICARO\\SQL16", database = "T1"), #DB_GIS(server = "ATENEA\\SQL22"),
+    connection = DB_T1(server = "ICARO\\SQL16"), #DB_GIS(server = "ATENEA\\SQL22"),
     statement = "SELECT * FROM V_T1NC_WEB WHERE YEAR >= 1950"
   )
 
