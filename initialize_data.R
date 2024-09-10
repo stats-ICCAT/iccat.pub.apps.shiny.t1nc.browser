@@ -171,7 +171,7 @@ META = list(LAST_UPDATE = "2024-09-10",
 
 save("META", file = "./shiny/META.RData", compress = "gzip")
 save("NC",   file = "./shiny/NC.RData",   compress = "gzip")
-save("NC_l", file = "./shiny/NC_l.RData",   compress = "gzip")
+save("NC_l", file = "./shiny/NC_l.RData", compress = "gzip")
 save("NC_w", file = "./shiny/NC_w.RData", compress = "gzip")
 
 write.table(NC_l, file = gzfile(paste0("./shiny/www/", META$FILENAME_LONG)), sep = ",", na = "", row.names = FALSE)
