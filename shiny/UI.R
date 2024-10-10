@@ -1,5 +1,5 @@
 ui = function() {
-  TITLE = paste0("ICCAT / Task 1 / NC / browser / ", META$LAST_UPDATE)
+  TITLE = "ICCAT / Task 1 / NC / browser"
   return(
     fluidPage(
       shinyjs::useShinyjs(),
